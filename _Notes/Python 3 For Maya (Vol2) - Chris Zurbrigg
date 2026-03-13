@@ -53,5 +53,64 @@ Custom Modules (part 4)
 - in .env file (PYTHONPATH=yourpath)
 - the key thing to note when a module is not found is checking that its location is on the sys.path
 
+Mesh Scatter Example (Part 2)
+- stub = function without implementation
+
+if __name__ == "__main__"
+- name is a dunder keyword
+- the value is set by the compiler depending on where the execution is starting
+- if the script is the main execution then this check will pass and fire
+- if the script is being imported then the name will not be __main__ and it will not fire
+
+Native UI Overview
+- native UI is one created using maya commands
+- wide range of UI options
+- they will all look exactly the same as the in editor options
+- although outdated by UI standards because MEL as remained the same,
+- Any UI built with native UI will 99% likely work with any maya version
+- good for super small, simple UI
+- alternative for UI is QT (third party UI framework)
+
+Minial UI Examples
+- when using native UI maya will remember what the last window/layout/etc. created was and by default will assign these
+as parents for any further created elements
+    - sort of bizarre and bug prone behaviour, try to always assign parents
+- the docs for native UI is concise and should be leveraged
+    - copy and paste the examples to quickly visualize each component
+- groups are basic elements bundled together to achieve common and useful behaviour
+- option menu has a different flow, items get added after the menu group is created
+
+Make It Interactive
+- most fields have one or more command flags
+- commands will fire set code when the condition is met (button press, input changed, etc.)
+- commands can take code written as a string as input (useful for super simple single line code
+    - there are formatting concerns though and this is super error prone when you can just create and pass func
+- be sure to not use () when setting a func in a command
+    - this will set the command to the return value of that function rather than the function itself
+- when a func is called through command, maya also passes the stat of the field to the func call
+    - additional args which then messes up func parameters
+    - best to avoid using the additional values being passed
+    - catch this by always using *args in your func
+- this can mess up func signatures and cause weird behaviour
+- from functools import partial
+    - allows you to build partial objects
+- this is required to pass func to command flag as passing them normally will again fire the func rather than pass it
+
+Deleting a Window
+- multiple instances of windows will be created each time your code fires
+- common algo for this is to check for any windows with the name of your window and delete them
+- this tends to catch 99% of situations
+
+Layouts
+- column layout is a vertical box
+- row layout is a horizontal box
+- CONFUSING and backwards IMO
+- layouts can be parented to other layouts to help build complex designs
+    - good to try and build some custom layouts (groups) that you like and reuse them
+- frame layout is nice looking layout that visually encapsulates a fields or other layouts
+    - use the collapsable flag, False by default
+
+
+
 
 
