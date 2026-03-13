@@ -1,0 +1,38 @@
+﻿Custom Modules (part 1)
+- modules are python files that contain statements, functions, classes, etc.
+- module name is the file name without the .py
+- modules are imported to other files using 'import'
+- can import just parts of a module 'from (module) import (part)'
+- many common modules (os, sys)
+- shape nodes in maya must always be parented to a transform node to exist
+- fundamental rule of DAG (directed acyclic graph) in maya
+- camera/mesh/light in maya need a way to explain where they are placed in a scene (transform)
+- this is accomplished by always parenting a shape node to the transform node
+- the outliner can display shape nodes is (Display > Shapes) is true
+- finding a nodes relatives and parents is common functionality
+
+Custom Modules (part 2)
+- maya creates a default directory for users
+- two locations for saving scripts
+    - main scripts folder allows your code to be used by any maya version
+    - maya specific sub folder (2022/2023)
+- in order for a module to be available in maya it must be saved on the python path
+- the various script directories created by maya on on the python path
+- important design practice when creating shelf button or menu items
+    - encapsulate the functionality into its own module/function so the item is a single call
+    - this ensures that any changes in the future will propagate without issue
+
+Custom Modules (part 3)
+- maya only loads script at startup
+    - importing all required modules and ignoring future calls to import
+- any scripting changes while a maya session is running will not get picked up
+- to get around this we can use the importlib module to force maya to reload modules
+    - import importlib
+    - importlib.reload(module)
+- this is only really required in the shelf or menu item code
+- import lib is necessary evil when developing, but should be removed if releasing scripts for production
+- *charcoal editor: alternative to import lib by removing current imports to force import calls to be triggered again
+    - (Command > Python > Revert Module State)
+
+Custom Modules (part 4)
+-

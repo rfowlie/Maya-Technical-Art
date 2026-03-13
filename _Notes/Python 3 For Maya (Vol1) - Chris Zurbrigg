@@ -1,0 +1,123 @@
+﻿Python VS MEL
+- no clear advantage to MEL.
+- MEL was developed 20 years ago and not updated, only for Maya
+- python is general purpose and continually developing
+- python had robust libraries and countless 3rd party packages
+- python is the standard VFX industry language (Houdini, Nuke, etc)
+- Basic MEL understanding is still important as Maya UI is built with MEL
+- Should know how to interpret MEL commands as actions are output as MEL
+
+Python Versions and Maya
+- python 3 is not backwards compatible with python 2
+
+Scripting Environment
+- quickest way to execute command is through the command line
+- command line can be hidden, fix with (Window > UI Elements > Command Line)
+- Type button (MEL, Python) toggles which language is being used
+- Script Editor (Windows > General Editors > Script Editor), or UI Button bottom right
+- Script Editor has two sections (output/history, and code)
+- Add new MEL or Python tabs to code window
+- Use keyboard enter to execute written code
+- Maya for some reason deletes your code after executing, to avoid this highlight your code (Ctrl+A) then keyboard enter
+- This odd behaviour makes using the script editor undesirable outside of testing tiny code snippets
+- Results are only displayed when a single line of code is executed. To view results more reliably wrap them in a print()
+
+Installing Charcoal Editor 2
+- Plugin written by Chris Zurbrigg (tutorial creator)
+- Charcoal is a plugin for Maya that replaces and enhances the script editor experience
+- Windows > Setting/Preferences > Plug-in Editor
+- Plugins are group by directory they are in
+- Toggle Loaded and Auto Load ON
+
+Maya Commands (Part 1)
+- python wrapper for MEL
+- commands can be parameterized, noted as 'Flags' which is what MEL calls them
+- to see all parameters for a command in editor use the cmds.help("commandName")
+
+
+Maya Commands (Part 2)
+- edit and query flags are special, these indicate the 'mode' of the command
+- if no mode is specified then the default mode is 'create'
+- query will return the current value of a property
+- edit will update the value of the property
+- when an object is not specified in the command call, current selection will be used (if nothing selected then error)
+- object name can be passed as first arg
+- querying only allows one value to be queried at a time
+- using commands on incorrect object types will raise errors (cmds.PolySphere() on a polyCube object)
+
+Maya Commands (Part 3)
+- the two most common commands are list (cmds.ls()) and select (cmds.select())
+
+Command Reference
+- maya documentation that lists and explains all commands, has examples
+(https://help.autodesk.com/view/MAYAUL/2023/ENU/?guid=__CommandsPython_index_html)
+- can be accessed through Maya in different ways
+    - Menu (Help > Scripting Reference > Python Command Reference)
+    - Script Editor (Help > Python Command Reference)
+    - *Charcoal Editor (right click > Command Reference)
+        - *Charcoal Editor: to directly access the command page (highlight command > right click > Command Reference)
+
+Quick Help
+- *Charcoal Editor
+- Highlight command > Right click > Quick Help
+- will display help on the side bar
+- useful alternative to cmds.help() as it will not mess with out output window
+
+Converting MEL to Python (Part 1)
+- Maya heavily dependant on MEL
+- when developing your own tools, it is likely that you will need to go through default functionality and copy it
+- UI actions are all executed with MEL and get output to the editor output
+    - Even action such as 'New File' or 'Open Recent' get executed as MEL
+- in MEL some flags can have multiple parameters which are space separated
+- In python when there are multiple parameters they are passed in as a list []
+    - this includes names ["pCube1", "pCube2", "pCube3"]
+- MEL flags start with a dash '-', python they are keyword arguments (query=True)
+    - if MEL flag takes no arguments, in python it will take a boolean (True/False)
+
+Converting MEL to Python (Part 2)
+- syntax from MEL to python a bit different
+- MEL (command flags names)
+- Python (command names parameters) - NOTE names are strings and require quotations ""
+- Convertion is imperative for effective maya python development
+
+Core Data Types
+- everything in python is an object (can be assigned to a variable)
+- lists are like arrays in other languages, they are denoted with square brackets []
+- tuple is an immutable list, denoted with regular parenthesis ()
+    - you can copy all values and edit values but this will cause a new object to be created
+- Type(object) will tell you what type an object is
+
+Variables
+- variables are custom named representations of objects in your script
+- variables allow you to refer to and track objects you have created
+
+Literals
+- in contrast to a variable that can change a literal is fixed representation of a value in source code
+- 20, 3.14 are literals
+- literals cannot be used as variable names
+
+Maya Commands: getAttr
+- allows you to get any attribute from an object in the scene
+- uses string notation
+- period indicates hierarchy
+- can use long or short name for attributes
+    - cmds.getAttr("World2.visibility") OR cmds.getAttr("World2.v")
+- using getAttr for transform information is common and quick (tx, ty, tz, rx, ry, rz, sx, sy, sz)
+- Finding attribute names
+    - select an object and change that attribute and it will output in MEL showing you the name
+    - go to (Channel Box/Layer Editor > Object > Channel Controls > Channel Names > Long/Short)
+- Locked: (flag) getAttr can test to see if attribute is locked
+
+Maya Commands: setAttr
+- allows you to modify the attribute values on objects
+
+Importing Modules
+- bring other python libraries into your script for use
+
+Pass By Reference
+- when passing literals they are passed by value (copies), changes to them in a function will not propagate
+- in python most things are passed by reference, adjustments in functions propagate
+
+
+
+
