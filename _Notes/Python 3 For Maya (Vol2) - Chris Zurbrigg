@@ -35,4 +35,23 @@ Custom Modules (part 3)
     - (Command > Python > Revert Module State)
 
 Custom Modules (part 4)
--
+- there are many script folders that maya adds to the sys path
+- to add your own module directory there are many options
+- add your own directories to the python path
+    - maya searches through all the directories to find the correct module
+    - because of constant reloading, it can become super inefficient if your custom paths are at the end of the list
+        - add them to the front of the list with sys.path.insert(0, path)
+- many paths are dynamically added just like custom adding one maya startup
+- (proof) checking the actual python path stored for your computer we can see it is much shorter
+
+    import os
+    paths = print(os.environ["PYTHONPATH"].split(';')
+    for p in paths:
+        print(p)
+
+- maya.env file is a spot where we can also add custom dirs
+- in .env file (PYTHONPATH=yourpath)
+- the key thing to note when a module is not found is checking that its location is on the sys.path
+
+
+
