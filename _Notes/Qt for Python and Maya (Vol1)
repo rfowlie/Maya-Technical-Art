@@ -60,6 +60,41 @@ Signal and Slots
 - there are many helpful signals already built into most widgets but you can create your own
 - to add new signals to a class you must subclass
 
+Open Import Tool
+- key take away is that a lot of functionality you probably want (file paths, etc.) exists within Qt
+- always search the documentation before trying to implement things as it might have already been solved for you
+
+Ready For Release
+- shelf code should be simple
+- there is development code for spawning and respawning tools
+- production ready tools should implement a singleton pattern for optimal user experience
+
+Widgets, Actions, Menus
+- Qt has a wide range of pre built widgets available to use
+- don't reinvent the wheel, just do the research on each widget for full potential and ease of development
+- *charcoal editor was made with QtWidgets
+- stack widget = index list on side, each index acts as tab, good for settings/options
+- combo box = drop down list, can store generic data with each option
+- spin box = numerical values only, but editable and scrollable
+- group box = nice title and shaded box, can contain any types of widgets, good polish
+- button groups = not a widget, does not change appearance, manages state of buttons
+    - good for grouping buttons and creating the radio button effect (for none radio buttons)
+    - if you have many radio buttons but they are not all connected, might need to use this separate them
+- text edit/plain text edit
+    - much more complex as they imitates things like notepad
+    - most useful for read only output windows
+    - NOTE if using for read only, you have to handle key presses or they get passed up the parent chain
+- tab widget = like windows properties menus
+    - ideally you want to create subclasses of QWidget for each tab you have
+        - can we not add layouts?
+- key presses in Qt get passed up the parent chain if the widget does not handle them
+    - def keyPressEvent(): Super()
+- because the maya main window will likely always be the final parent, it will receive the unhandled key presses and
+likely perform unintended actions which is undesirable and confusing
+- prevent by overriding keyPressEvent() and not calling Super()
+    - or calling Super() for specific keys
+
+
 
 
 
