@@ -110,6 +110,55 @@ Layouts
 - frame layout is nice looking layout that visually encapsulates a fields or other layouts
     - use the collapsable flag, False by default
 
+Object Oriented Programming
+- paradigm that creates objects that bundle common behaviours and properties
+- procedural programming (functional programming?)
+    - relies on functions to act on arguments being passed in
+    - structured as series of steps
+- OOP is more flexible when building plug-ins and UIs for maya
+- a class is the blueprint of an object, how to create it and what it's default values and behaviours are
+- an instance is a living version of a class
+- class is the theory, instance is the application
+- in python __init__ is the constructor
+    - def __init__(self)
+- in python 'self' is the equivalent of 'this' in C++/C#
+- in python class method definitions always require 'self' to be passed as the first argument
+    - when calling a class method on an instance, self is not required to be passed in it is auto passed in
+- class variables = static variables
+    - in python they are written without the 'self' keyword
+    - they are accessible without an instance of the class
+- class methods = static methods
+    - instance variables are not accessible in these methods as they do not have access to an instance
+    - requires the use of a decorator (@classmethod) to make a function a class method
+    - instead of 'self' the first arg in a class method is 'cls'
+- IMPORTANT NOTE on variables
+    - in python, variables can be declared anywhere in the class including methods
+    - unlike other languages where variables must be declared in the class scope
+    - this means you can do some interesting things with class creation
+
+Inheritance
+- extending a class
+- subclass of a class
+- taking on the variables and methods, adding new functionality of overriding functionality
+- 'object' is the base python class
+- define the parent class in the class parenthesis
+    - class SpecialClass(OriginalClass):
+- no special keyword for overriding methods, just write the method in the subclass and put new implementation
+- calling base class implementation of a function
+    - super().functionName(expected parameters)
+        - do not have to pass 'self' in the expected parameters
+
+
+Importing
+- different ways to import
+- entire module
+    - import module
+- specific part
+    - from module import class
+- specific part and give that part an alias
+    - from module import class as cls
+- can do import lines inside try except block to catch incompatibilities
+
 
 
 

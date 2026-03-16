@@ -1,0 +1,67 @@
+﻿Qt Overview
+- cross platform framework
+- can be used to build your own UI for apps
+- great for for UI
+    - not only for UI, helpful for file handling, networking, etc.
+- widely adopted by VFX industry, many DCCs are built using Qt
+- far more control and flexibility than maya native UI
+- learning curve can be steep, some unique design patterns
+- Qt version updates can potentially cause breaks with programs that use them
+    - the is a necessary evil for a central framework
+
+Qt Versions in Maya
+- Starting in Maya 2025 Qt6(Pyside6) was adopted, prior to this is was Qt5 (PySide2)
+    - most of the breaking changes are in complicated ares of the code
+
+Qt Windows
+- QtCore module holds many useful functionality and should usually be imported along with QtWidgets
+- QDialog good for short lived UIs
+- the QtWidget base class has so many useful functions and variables to achieve most UI functionality you could desire
+- By default in window, when a window gains focus it becomes the top level widget and any other widgets fall behind
+    - the exception is windows that are children of the top level window
+    - must parent our widgets to Maya so they do not fall behind
+- no direct method to get mayas main window
+- widgets can act as windows
+- widgets can parent to any other widget
+- QWidget is the base class of all widgets
+- you should have an OOP mindset when building UI
+    - break it down into as many different widgets as required
+    - do not try to create one monolithic widget
+- layouts are not widgets
+- layouts are imperative for organizing widgets cleanly
+- generally widgets will be parented to a layout which is then parented to a widget or other layout
+- because layouts can be added or parent to other layouts you can create complicated nested layouts
+- widget and layout creation should be encapsulated within functions
+- during tool development it is important to create the behaviour where when tool is opened, any previous instances are
+destroyed and a new instance is created so that we can test our changes
+- but in production what should occur is that the first time the tool is opened, and instance is created, and then when
+the tool is closed it does not actually close, but rather sets its UI to hidden
+    - benefit to this is that the tool will have memory inherently
+
+
+Signal and Slots
+- allow for communication between two objects
+    - command pattern
+- provides interactivity for UI
+- signal is the action that occurred (button clicked)
+- slot is the method that is called when signal occurs
+- connection is the link between a signal and a slot
+- Qt documentation, each widget has a signals section showing what signals are available
+    - auto complete does not work great for signals
+- Qt documentation recommends that you decorate all methods used as slots with @QtCore.Slot()
+    - ensuring you match args
+    - slot method def slot_method(arg_1), then decorator looks like @QtCore.Slot(arg_1)
+    - reason for this is that it can cause unnecessary overhead or might cause issues with QML
+    - due to python not supporting method overloading, the decorator helps distinguish methods
+    - most use cases are for backwards compatibility, need to keep in the back of mind
+- slots (methods) can safely ignore too many arguments being passed to them from signals but not the other way around
+    - slots should use the *args
+    - slots should query relevant info in the method and not expect info to be passed in
+- there are many helpful signals already built into most widgets but you can create your own
+- to add new signals to a class you must subclass
+
+
+
+
+
+
