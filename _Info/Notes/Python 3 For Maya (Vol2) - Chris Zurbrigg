@@ -1,0 +1,165 @@
+﻿Custom Modules (part 1)
+- modules are python files that contain statements, functions, classes, etc.
+- module name is the file name without the .py
+- modules are imported to other files using 'import'
+- can import just parts of a module 'from (module) import (part)'
+- many common modules (os, sys)
+- shape nodes in maya must always be parented to a transform node to exist
+- fundamental rule of DAG (directed acyclic graph) in maya
+- camera/mesh/light in maya need a way to explain where they are placed in a scene (transform)
+- this is accomplished by always parenting a shape node to the transform node
+- the outliner can display shape nodes is (Display > Shapes) is true
+- finding a nodes relatives and parents is common functionality
+
+Custom Modules (part 2)
+- maya creates a default directory for users
+- two locations for saving scripts
+    - main scripts folder allows your code to be used by any maya version
+    - maya specific sub folder (2022/2023)
+- in order for a module to be available in maya it must be saved on the python path
+- the various script directories created by maya on on the python path
+- important design practice when creating shelf button or menu items
+    - encapsulate the functionality into its own module/function so the item is a single call
+    - this ensures that any changes in the future will propagate without issue
+
+Custom Modules (part 3)
+- maya only loads script at startup
+    - importing all required modules and ignoring future calls to import
+- any scripting changes while a maya session is running will not get picked up
+- to get around this we can use the importlib module to force maya to reload modules
+    - import importlib
+    - importlib.reload(module)
+- this is only really required in the shelf or menu item code
+- import lib is necessary evil when developing, but should be removed if releasing scripts for production
+- *charcoal editor: alternative to import lib by removing current imports to force import calls to be triggered again
+    - (Command > Python > Revert Module State)
+
+Custom Modules (part 4)
+- there are many script folders that maya adds to the sys path
+- to add your own module directory there are many options
+- add your own directories to the python path
+    - maya searches through all the directories to find the correct module
+    - because of constant reloading, it can become super inefficient if your custom paths are at the end of the list
+        - add them to the front of the list with sys.path.insert(0, path)
+- many paths are dynamically added just like custom adding one maya startup
+- (proof) checking the actual python path stored for your computer we can see it is much shorter
+
+    import os
+    paths = print(os.environ["PYTHONPATH"].split(';')
+    for p in paths:
+        print(p)
+
+- maya.env file is a spot where we can also add custom dirs
+- in .env file (PYTHONPATH=yourpath)
+- the key thing to note when a module is not found is checking that its location is on the sys.path
+
+Mesh Scatter Example (Part 2)
+- stub = function without implementation
+
+if __name__ == "__main__"
+- name is a dunder keyword
+- the value is set by the compiler depending on where the execution is starting
+- if the script is the main execution then this check will pass and fire
+- if the script is being imported then the name will not be __main__ and it will not fire
+
+Native UI Overview
+- native UI is one created using maya commands
+- wide range of UI options
+- they will all look exactly the same as the in editor options
+- although outdated by UI standards because MEL as remained the same,
+- Any UI built with native UI will 99% likely work with any maya version
+- good for super small, simple UI
+- alternative for UI is QT (third party UI framework)
+
+Minial UI Examples
+- when using native UI maya will remember what the last window/layout/etc. created was and by default will assign these
+as parents for any further created elements
+    - sort of bizarre and bug prone behaviour, try to always assign parents
+- the docs for native UI is concise and should be leveraged
+    - copy and paste the examples to quickly visualize each component
+- groups are basic elements bundled together to achieve common and useful behaviour
+- option menu has a different flow, items get added after the menu group is created
+
+Make It Interactive
+- most fields have one or more command flags
+- commands will fire set code when the condition is met (button press, input changed, etc.)
+- commands can take code written as a string as input (useful for super simple single line code
+    - there are formatting concerns though and this is super error prone when you can just create and pass func
+- be sure to not use () when setting a func in a command
+    - this will set the command to the return value of that function rather than the function itself
+- when a func is called through command, maya also passes the stat of the field to the func call
+    - additional args which then messes up func parameters
+    - best to avoid using the additional values being passed
+    - catch this by always using *args in your func
+- this can mess up func signatures and cause weird behaviour
+- from functools import partial
+    - allows you to build partial objects
+- this is required to pass func to command flag as passing them normally will again fire the func rather than pass it
+
+Deleting a Window
+- multiple instances of windows will be created each time your code fires
+- common algo for this is to check for any windows with the name of your window and delete them
+- this tends to catch 99% of situations
+
+Layouts
+- column layout is a vertical box
+- row layout is a horizontal box
+- CONFUSING and backwards IMO
+- layouts can be parented to other layouts to help build complex designs
+    - good to try and build some custom layouts (groups) that you like and reuse them
+- frame layout is nice looking layout that visually encapsulates a fields or other layouts
+    - use the collapsable flag, False by default
+
+Object Oriented Programming
+- paradigm that creates objects that bundle common behaviours and properties
+- procedural programming (functional programming?)
+    - relies on functions to act on arguments being passed in
+    - structured as series of steps
+- OOP is more flexible when building plug-ins and UIs for maya
+- a class is the blueprint of an object, how to create it and what it's default values and behaviours are
+- an instance is a living version of a class
+- class is the theory, instance is the application
+- in python __init__ is the constructor
+    - def __init__(self)
+- in python 'self' is the equivalent of 'this' in C++/C#
+- in python class method definitions always require 'self' to be passed as the first argument
+    - when calling a class method on an instance, self is not required to be passed in it is auto passed in
+- class variables = static variables
+    - in python they are written without the 'self' keyword
+    - they are accessible without an instance of the class
+- class methods = static methods
+    - instance variables are not accessible in these methods as they do not have access to an instance
+    - requires the use of a decorator (@classmethod) to make a function a class method
+    - instead of 'self' the first arg in a class method is 'cls'
+- IMPORTANT NOTE on variables
+    - in python, variables can be declared anywhere in the class including methods
+    - unlike other languages where variables must be declared in the class scope
+    - this means you can do some interesting things with class creation
+
+Inheritance
+- extending a class
+- subclass of a class
+- taking on the variables and methods, adding new functionality of overriding functionality
+- 'object' is the base python class
+- define the parent class in the class parenthesis
+    - class SpecialClass(OriginalClass):
+- no special keyword for overriding methods, just write the method in the subclass and put new implementation
+- calling base class implementation of a function
+    - super().functionName(expected parameters)
+        - do not have to pass 'self' in the expected parameters
+
+
+Importing
+- different ways to import
+- entire module
+    - import module
+- specific part
+    - from module import class
+- specific part and give that part an alias
+    - from module import class as cls
+- can do import lines inside try except block to catch incompatibilities
+
+
+
+
+

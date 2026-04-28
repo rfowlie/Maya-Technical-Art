@@ -1,0 +1,126 @@
+﻿Qt Overview
+- cross platform framework
+- can be used to build your own UI for apps
+- great for for UI
+    - not only for UI, helpful for file handling, networking, etc.
+- widely adopted by VFX industry, many DCCs are built using Qt
+- far more control and flexibility than maya native UI
+- learning curve can be steep, some unique design patterns
+- Qt version updates can potentially cause breaks with programs that use them
+    - the is a necessary evil for a central framework
+
+Qt Versions in Maya
+- Starting in Maya 2025 Qt6(Pyside6) was adopted, prior to this is was Qt5 (PySide2)
+    - most of the breaking changes are in complicated ares of the code
+
+Qt Windows
+- QtCore module holds many useful functionality and should usually be imported along with QtWidgets
+- QDialog good for short lived UIs
+- the QtWidget base class has so many useful functions and variables to achieve most UI functionality you could desire
+- By default in window, when a window gains focus it becomes the top level widget and any other widgets fall behind
+    - the exception is windows that are children of the top level window
+    - must parent our widgets to Maya so they do not fall behind
+- no direct method to get mayas main window
+- widgets can act as windows
+- widgets can parent to any other widget
+- QWidget is the base class of all widgets
+- you should have an OOP mindset when building UI
+    - break it down into as many different widgets as required
+    - do not try to create one monolithic widget
+- layouts are not widgets
+- layouts are imperative for organizing widgets cleanly
+- generally widgets will be parented to a layout which is then parented to a widget or other layout
+- because layouts can be added or parent to other layouts you can create complicated nested layouts
+- widget and layout creation should be encapsulated within functions
+- during tool development it is important to create the behaviour where when tool is opened, any previous instances are
+destroyed and a new instance is created so that we can test our changes
+- but in production what should occur is that the first time the tool is opened, and instance is created, and then when
+the tool is closed it does not actually close, but rather sets its UI to hidden
+    - benefit to this is that the tool will have memory inherently
+
+
+Signal and Slots
+- allow for communication between two objects
+    - command pattern
+- provides interactivity for UI
+- signal is the action that occurred (button clicked)
+- slot is the method that is called when signal occurs
+- connection is the link between a signal and a slot
+- Qt documentation, each widget has a signals section showing what signals are available
+    - auto complete does not work great for signals
+- Qt documentation recommends that you decorate all methods used as slots with @QtCore.Slot()
+    - ensuring you match args
+    - slot method def slot_method(arg_1), then decorator looks like @QtCore.Slot(arg_1)
+    - reason for this is that it can cause unnecessary overhead or might cause issues with QML
+    - due to python not supporting method overloading, the decorator helps distinguish methods
+    - most use cases are for backwards compatibility, need to keep in the back of mind
+- slots (methods) can safely ignore too many arguments being passed to them from signals but not the other way around
+    - slots should use the *args
+    - slots should query relevant info in the method and not expect info to be passed in
+- there are many helpful signals already built into most widgets but you can create your own
+- to add new signals to a class you must subclass
+
+Open Import Tool
+- key take away is that a lot of functionality you probably want (file paths, etc.) exists within Qt
+- always search the documentation before trying to implement things as it might have already been solved for you
+
+Ready For Release
+- shelf code should be simple
+- there is development code for spawning and respawning tools
+- production ready tools should implement a singleton pattern for optimal user experience
+
+Widgets, Actions, Menus
+- Qt has a wide range of pre built widgets available to use
+- don't reinvent the wheel, just do the research on each widget for full potential and ease of development
+- *charcoal editor was made with QtWidgets
+- stack widget = index list on side, each index acts as tab, good for settings/options
+- combo box = drop down list, can store generic data with each option
+- spin box = numerical values only, but editable and scrollable
+- group box = nice title and shaded box, can contain any types of widgets, good polish
+- button groups = not a widget, does not change appearance, manages state of buttons
+    - good for grouping buttons and creating the radio button effect (for none radio buttons)
+    - if you have many radio buttons but they are not all connected, might need to use this separate them
+- text edit/plain text edit
+    - much more complex as they imitates things like notepad
+    - most useful for read only output windows
+    - NOTE if using for read only, you have to handle key presses or they get passed up the parent chain
+- tab widget = like windows properties menus
+    - ideally you want to create subclasses of QWidget for each tab you have
+        - can we not add layouts?
+- key presses in Qt get passed up the parent chain if the widget does not handle them
+    - def keyPressEvent(): Super()
+- because the maya main window will likely always be the final parent, it will receive the unhandled key presses and
+likely perform unintended actions which is undesirable and confusing
+- prevent by overriding keyPressEvent() and not calling Super()
+    - or calling Super() for specific keys
+- list view vs list widget
+    - list view has more features but more overhead
+    - can have multiple items
+    - can have different selection modes allowing just single/multiple item selection
+- stack widget
+    - does not act like stacks in programming
+    - similar to tab widget in that only one of the widgets is visible except there is not tabs
+    - changing what widget is visible needs to be run by code
+- menu bars
+    - allow for easy creation of default menus
+    - uses QActions to drive functionality
+    - layouts contain special set method for menus (layout.setMenuBar)
+        - to ensure typical spacing and look
+- QAction
+    - abstraction for user commands which can be added to different UI components
+        - command pattern
+        - in maya there are many buttons to achieve the same action
+            - the UI might be different but they all reference the same action instance
+    - can add shortcuts to action through action.setShortcut(QtGui.QKeySequence("Ctrl+Shift+A"))
+        - this ensures that key presses from shortcuts get consumed by the widget
+- menus can be nested, they will act as branches in the tree, actions are the leafs (final node) of the menus
+- table widget
+    - item based table view
+    - basically a spread sheet like excel
+    - view, store and manipulate data
+    
+
+
+
+
+
