@@ -93,8 +93,32 @@ Widgets, Actions, Menus
 likely perform unintended actions which is undesirable and confusing
 - prevent by overriding keyPressEvent() and not calling Super()
     - or calling Super() for specific keys
-
-
+- list view vs list widget
+    - list view has more features but more overhead
+    - can have multiple items
+    - can have different selection modes allowing just single/multiple item selection
+- stack widget
+    - does not act like stacks in programming
+    - similar to tab widget in that only one of the widgets is visible except there is not tabs
+    - changing what widget is visible needs to be run by code
+- menu bars
+    - allow for easy creation of default menus
+    - uses QActions to drive functionality
+    - layouts contain special set method for menus (layout.setMenuBar)
+        - to ensure typical spacing and look
+- QAction
+    - abstraction for user commands which can be added to different UI components
+        - command pattern
+        - in maya there are many buttons to achieve the same action
+            - the UI might be different but they all reference the same action instance
+    - can add shortcuts to action through action.setShortcut(QtGui.QKeySequence("Ctrl+Shift+A"))
+        - this ensures that key presses from shortcuts get consumed by the widget
+- menus can be nested, they will act as branches in the tree, actions are the leafs (final node) of the menus
+- table widget
+    - item based table view
+    - basically a spread sheet like excel
+    - view, store and manipulate data
+    
 
 
 
